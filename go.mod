@@ -3,7 +3,7 @@ module github.com/drewwalton19216801/go65emu
 go 1.24.2
 
 require (
-	github.com/drewwalton19216801/sixty502 v0.0.0-20250412210450-10a8055132dc
+	github.com/drewwalton19216801/sixty502 v0.0.0-20250609212450-019a6dc64435
 	github.com/gen2brain/raylib-go/raylib v0.0.0-20250409052854-a4292f0f0412
 )
 

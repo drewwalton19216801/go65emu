@@ -2,6 +2,8 @@ github.com/drewwalton19216801/sixty502 v0.0.0-20250412193332-4d465385824f h1:acz
 github.com/drewwalton19216801/sixty502 v0.0.0-20250412193332-4d465385824f/go.mod h1:3tckiyQbOXxvDGKpp9yoJF3d85tE+Rnfyl3g975iDYE=
 github.com/drewwalton19216801/sixty502 v0.0.0-20250412210450-10a8055132dc h1:VmmAcpgGpa04Yv2DP45j+TH/XpLtBxen3dEMBYv+fFo=
 github.com/drewwalton19216801/sixty502 v0.0.0-20250412210450-10a8055132dc/go.mod h1:3tckiyQbOXxvDGKpp9yoJF3d85tE+Rnfyl3g975iDYE=
+github.com/drewwalton19216801/sixty502 v0.0.0-20250609212450-019a6dc64435 h1:JHnVulP5A5tikCQKami0x8NGGKsNjksb19FVWyNBg/M=
+github.com/drewwalton19216801/sixty502 v0.0.0-20250609212450-019a6dc64435/go.mod h1:3tckiyQbOXxvDGKpp9yoJF3d85tE+Rnfyl3g975iDYE=
 github.com/ebitengine/purego v0.8.2 h1:jPPGWs2sZ1UgOSgD2bClL0MJIqu58nOmIcBuXr62z1I=
 github.com/ebitengine/purego v0.8.2/go.mod h1:iIjxzd6CiRiOG0UyXP+V1+jWqUXVjPKLAI0mRfJZTmQ=
 github.com/gen2brain/raylib-go/raylib v0.0.0-20250409052854-a4292f0f0412 h1:1ilXP20QHDAM0Vl6D9SNoNs6x+iyeV1TYsTZaltOLQY=
