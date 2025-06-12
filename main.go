@@ -24,24 +24,24 @@ const (
 	codeViewLines = 15 // <<<--- ADD THIS CONSTANT
 )
 
-// RAM represents the 64KB memory space
-type RAM struct {
+// Bus represents the 64KB memory space
+type Bus struct {
 	mem [65536]byte
 }
 
 // Read implements the cpu6502.Bus interface
-func (r *RAM) Read(addr uint16) uint8 {
+func (r *Bus) Read(addr uint16) uint8 {
 	// No boundary check needed due to uint16, wraps around naturally
 	return r.mem[addr]
 }
 
 // Write implements the cpu6502.Bus interface
-func (r *RAM) Write(addr uint16, data uint8) {
+func (r *Bus) Write(addr uint16, data uint8) {
 	r.mem[addr] = data
 }
 
 // LoadProgram reads a binary file into memory at a specific address
-func (r *RAM) LoadProgram(filename string, startAddr uint16) error {
+func (r *Bus) LoadProgram(filename string, startAddr uint16) error {
 	data, err := os.ReadFile(filename)
 	if err != nil {
 		return fmt.Errorf("failed to read file %s: %w", filename, err)
@@ -68,7 +68,7 @@ func main() {
 	flag.Parse()
 
 	// Initialize Memory and CPU
-	ram := &RAM{} // Zero-initialized memory
+	ram := &Bus{} // Zero-initialized memory
 	cpu := cpu6502.NewCPU(ram)
 
 	// Load program if specified
@@ -267,7 +267,7 @@ func DrawControls(x, y int32, font rl.Font, running bool) {
 }
 
 // DrawMemoryView displays a portion of RAM
-func DrawMemoryView(ram *RAM, startAddr uint16, x, y, rows, cols int32, font rl.Font) {
+func DrawMemoryView(bus *Bus, startAddr uint16, x, y, rows, cols int32, font rl.Font) {
 	lineHeight := int32(charHeight)
 	addr := startAddr
 	asciiStr := make([]byte, cols)
@@ -280,7 +280,7 @@ func DrawMemoryView(ram *RAM, startAddr uint16, x, y, rows, cols int32, font rl.
 		// Draw Hex Bytes & Build ASCII string
 		hexStr := ""
 		for c := int32(0); c < cols; c++ {
-			val := ram.Read(addr + uint16(c))
+			val := bus.Read(addr + uint16(c))
 			hexStr += fmt.Sprintf("%02X ", val)
 			if val >= 32 && val <= 126 { // Printable ASCII
 				asciiStr[c] = val
