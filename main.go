@@ -12,8 +12,8 @@ import (
 )
 
 const (
-	screenWidth  = 800
-	screenHeight = 600
+	screenWidth  = 1000
+	screenHeight = 700
 
 	charWidth     = 10 // Estimated width for default font or loaded font
 	charHeight    = 20 // Estimated height
@@ -94,10 +94,6 @@ func main() {
 
 	// --- Perform initial CPU Reset ---
 	cpu.Reset()
-	// If a program was loaded, override the PC set by Reset() to point to the program start
-	if *binFile != "" {
-		cpu.PC = entryPoint
-	}
 	// --- End Reset ---
 
 	// Raylib Initialization
@@ -147,9 +143,6 @@ func main() {
 		}
 		if rl.IsKeyPressed(rl.KeyR) {
 			cpu.Reset()
-			if *binFile != "" {
-				cpu.PC = entryPoint // Point back to loaded program start
-			}
 			running = false
 			disassemblyNeedsUpdate = true
 			log.Println("CPU Reset.")
@@ -270,9 +263,11 @@ func DrawControls(x, y int32, font rl.Font, running bool) {
 func DrawMemoryView(bus *Bus, startAddr uint16, x, y, rows, cols int32, font rl.Font) {
 	lineHeight := int32(charHeight)
 	addr := startAddr
-	asciiStr := make([]byte, cols)
 
+	// Initialize ASCII string buffer for each row
 	for r := int32(0); r < rows; r++ {
+		asciiStr := make([]byte, cols)
+
 		// Draw Address
 		addrHex := fmt.Sprintf("$%04X: ", addr)
 		rl.DrawTextEx(font, addrHex, rl.NewVector2(float32(x), float32(y+r*lineHeight)), float32(font.BaseSize), 1, rl.Blue)
@@ -288,16 +283,19 @@ func DrawMemoryView(bus *Bus, startAddr uint16, x, y, rows, cols int32, font rl.
 				asciiStr[c] = '.'
 			}
 		}
-		// Draw Hex String
-		hexX := float32(x + int32(len(addrHex))*charWidth/2 + 10) // Adjust spacing based on font/char width
+
+		// Calculate proper positioning based on actual font metrics
+		addrSize := rl.MeasureTextEx(font, addrHex, float32(font.BaseSize), 1)
+		hexX := float32(x) + addrSize.X + 10
 		rl.DrawTextEx(font, hexStr, rl.NewVector2(hexX, float32(y+r*lineHeight)), float32(font.BaseSize), 1, rl.Black)
 
-		// Draw ASCII String
-		asciiX := hexX + float32(len(hexStr))*charWidth/2 + 10 // Adjust spacing
-		rl.DrawTextEx(font, string(asciiStr), rl.NewVector2(asciiX, float32(y+r*lineHeight)), float32(font.BaseSize), 1, rl.DarkGreen)
+		// Calculate ASCII column position based on hex string width
+		hexSize := rl.MeasureTextEx(font, hexStr, float32(font.BaseSize), 1)
+		asciiX := hexX + hexSize.X + 10
+		rl.DrawTextEx(font, string(asciiStr), rl.NewVector2(asciiX, float32(y+r*lineHeight)), float32(font.BaseSize), 1, rl.Black)
 
-		addr += uint16(cols)  // Move to next line's address
-		if addr < startAddr { // Stop if wrapped around (shouldn't happen with rows*cols << 64k)
+		addr += uint16(cols)
+		if addr < startAddr {
 			break
 		}
 	}
